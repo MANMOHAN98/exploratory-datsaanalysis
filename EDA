@@ -1,0 +1,53 @@
+import pandas as pd
+
+
+df = pd.read_csv('/content/Titanic-Dataset.csv')  
+
+
+print(df.head())
+print(df.info())
+print(df.describe())
+summary_stats = df.describe(include='all')
+print(summary_stats)
+
+
+print(df.isnull().sum())
+
+
+print(df.dtypes)
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+df.hist(bins=30, figsize=(15, 10))
+plt.suptitle('Histograms of Numeric Features')
+plt.show()
+
+
+numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+
+for col in numeric_cols:
+    plt.figure(figsize=(6, 4))
+    sns.boxplot(x=df[col])
+    plt.title(f'Boxplot of {col}')
+    plt.show()
+plt.figure(figsize=(10, 8))
+
+numeric_df = df.select_dtypes(include=['float64', 'int64'])
+corr = numeric_df.corr()
+sns.heatmap(corr, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title('Correlation Matrix')
+plt.show()
+
+
+sns.pairplot(numeric_df)
+plt.show()
+import plotly.express as px
+
+
+fig = px.histogram(df, x='Age', nbins=30, title='Interactive Histogram of Age')
+fig.show()
+
+
+fig = px.scatter_matrix(df[numeric_cols])
+fig.show()
